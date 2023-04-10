@@ -1,26 +1,27 @@
-#include "main.h"
+#include <stdio.h>
 #include <stdlib.h>
 /**
- * main - Write a program that multiplies two numbers
- * @argc: count the number of argruments.
- * @argv: Pinter to the string of arguments.
- * Return: 0.
-*/
+ * main - Main Entry
+ * @argc: input
+ * @argv: input
+ * Return: Always 0 Success
+ */
 int main(int argc, char *argv[])
 {
-	int num1, num2, sum;
+	int i, res = 1;
 
 	if (argc != 3)
 	{
-	printf("Error\n");
-	return (1);
+		printf("%s\n", "Error");
+		return (1);
 	}
-
-	num1 = atoi(argv[1]);
-	num2 = atoi(argv[2]);
-	sum = num1 * num2;
-
-	printf("%d\n", sum);
+	else
+	{
+		for (i = 1; i < argc; i++)
+		{
+			res *= atoi(argv[i]);
+		}
+		printf("%d\n", res);
+	}
 	return (0);
 }
-

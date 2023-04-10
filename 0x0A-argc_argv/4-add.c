@@ -1,36 +1,38 @@
-#include "main.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 /**
- * main - Write a program that adds positive numbers
- * @argc: count the number of argruments.
- * @argv: Pinter to the string of arguments.
- * Return: 0.
-*/
+ * main - Main Entry
+ * @argc: input
+ * @argv: input
+ * Return: Always 0 (Success)
+ */
 int main(int argc, char *argv[])
 {
-	int sum = 0;
-	int i, j;
+	int sum;
+	int count;
+	int i;
 
+	count = 1;
+	sum = 0;
 	if (argc == 1)
 	{
 		printf("0\n");
 		return (0);
 	}
-
-	for (i = 1; i < argc; i++)
+	while (count < argc)
 	{
-		for (j = 0; argv[i][j] != '\0'; j++)
+		for (i = 0; argv[count][i] != '\0'; i++)
 		{
-			if (!isdigit(argv[i][j]))
+			if (!(isdigit(argv[count][i])))
 			{
 				printf("Error\n");
 				return (1);
 			}
 		}
-		sum += atoi(argv[i]);
+		sum += atoi(argv[count]);
+		count++;
 	}
-
 	printf("%d\n", sum);
 	return (0);
 }
