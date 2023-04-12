@@ -1,8 +1,0 @@
-""
-sitive_or_negative.c:17: ERROR: space prohibited before that ',' (ctx:WxW)
-total: 1 errors, 0 warnings, 28 lines checked
-main
-sitive_or_negative.c:7: WARNING: line over 80 characters (87)
-0-positive_or_negative.c:8: WARNING: line over 80 characters (96)
-total: 0 errors, 2 warnings, 24 lines checked
-main
