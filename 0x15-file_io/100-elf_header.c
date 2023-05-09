@@ -1,39 +1,17 @@
-import random
+def remove_duplicates(lst1, lst2):
+    """Returns a new list that contains only the unique elements from lst1 and lst2"""
+    unique_elements = []
+    for item in lst1:
+        if item not in unique_elements:
+            unique_elements.append(item)
+    for item in lst2:
+        if item not in unique_elements:
+            unique_elements.append(item)
+    return unique_elements
 
-def hangman():
-    words = ['python', 'java', 'kotlin', 'javascript']
-    word = random.choice(words)
-    word_letters = set(word)
-    alphabet = set('abcdefghijklmnopqrstuvwxyz')
-    used_letters = set()
+# Example usage
+list1 = [1, 2, 3, 4]
+list2 = [3, 4, 5, 6]
+result = remove_duplicates(list1, list2)
+print(result)
 
-    lives = 6
-
-    while len(word_letters) > 0 and lives > 0:
-        print('You have', lives, 'lives left and you have used these letters: ', ' '.join(used_letters))
-
-        word_list = [letter if letter in used_letters else '-' for letter in word]
-        print('Current word: ', ' '.join(word_list))
-
-        user_letter = input('Guess a letter: ').lower()
-
-        if user_letter in alphabet - used_letters:
-            used_letters.add(user_letter)
-            if user_letter in word_letters:
-                word_letters.remove(user_letter)
-            else:
-                lives = lives - 1
-                print('Letter is not in word.')
-
-        elif user_letter in used_letters:
-            print('You have already used that character. Please try again.')
-
-        else:
-            print('Invalid character. Please try again.')
-
-    if lives == 0:
-        print('Sorry, you died. The word was', word)
-    else:
-        print('Congratulations! You guessed the word', word, '!!')
-
-hangman()

@@ -1,113 +1,41 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
-char *create_buffer(void);
-void close_file(int fd);
+#define BUFFER_SIZE 1024
+#define EXIT_USAGE_ERROR 97
+#define EXIT_READ_ERROR 98
+#define EXIT_WRITE_ERROR 99
+#define EXIT_CLOSE_ERROR 100
 
 /**
- * create_buffer - Allocates 1024 bytes for a buffer.
+ * print_error - Prints an error message to standard error and exits the program
  *
- * Return: A pointer to the newly-allocated buffer.
+ * @message: The error message to print
+ * @filename: The name of the file to use in the error message, or NULL
+ * @exit_code: The exit code to use when exiting the program
+ *
+ * Description: This function prints the given error message to standard error,
+ * optionally including the given filename in the message. It then exits the
+ * program with the given exit code.
  */
-char *create_buffer(void)
+void print_error(char *message, char *filename, int exit_code)
 {
-	char *buffer;
+    if (filename == NULL)
+        dprintf(STDERR_FILENO, "%s: Exiting with status %d\n", message, exit_code);
+    else
+        dprintf(STDERR_FILENO, "%s: %s: Exiting with status %d\n", message, filename, exit_code);
 
-	buffer = malloc(sizeof(char) * 1024);
-
-	if (buffer == NULL)
-	{
-		perror("Error");
-		exit(EXIT_FAILURE);
-	}
-
-	return (buffer);
+    exit(exit_code);
 }
 
 /**
- * close_file - Closes file descriptors.
- * @fd: The file descriptor to be closed.
- */
-void close_file(int fd)
-{
-	int c;
-
-	c = close(fd);
-
-	if (c == -1)
-	{
-		perror("Error");
-		exit(EXIT_FAILURE);
-	}
-}
-
-/**
- * main - Copies the contents of a file to another file.
- * @argc: The number of arguments supplied to the program.
- * @argv: An array of pointers to the arguments.
+ * copy_file - Copies the content of one file to another
  *
- * Return: 0 on success.
+ * @file_from: The name of the file to copy from
+ * @file_to: The name of the file to copy to
  *
- * Description: If the argument count is incorrect - exit code 97.
- *              If file_from does not exist or cannot be read - exit code 98.
- *              If file_to cannot be created or written to - exit code 99.
- *              If file_to or file_from cannot be closed - exit code 100.
- */
-int main(int argc, char *argv[])
-{
-	int from, to, r, w;
-	char *buffer;
+ *
 
-	if (argc != 3)
-	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
-		exit(97);
-	}
-
-	buffer = create_buffer();
-	from = open(argv[1], O_RDONLY);
-	if (from == -1)
-	{
-		perror("Error");
-		free(buffer);
-		exit(98);
-	}
-	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
-	if (to == -1)
-	{
-		perror("Error");
-		close_file(from);
-		free(buffer);
-		exit(99);
-	}
-
-	do {
-		r = read(from, buffer, 1024);
-		if (r == -1)
-		{
-			perror("Error");
-			close_file(from);
-			close_file(to);
-			free(buffer);
-			exit(98);
-		}
-
-		w = write(to, buffer, r);
-		if (w == -1)
-		{
-			perror("Error");
-			close_file(from);
-			close_file(to);
-			free(buffer);
-			exit(99);
-		}
-
-	} while (r > 0);
-
-	free(buffer);
-	close_file(from);
-	close_file(to);
-
-	return (0);
-}
